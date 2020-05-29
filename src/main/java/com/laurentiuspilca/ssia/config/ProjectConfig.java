@@ -21,14 +21,11 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        var userDetailService = new InMemoryUserDetailsManager();
-
-        var user = User.withUsername("Neoa").password("12345").authorities("read").build();
-
-        userDetailService.createUser(user);
-
-        auth.userDetailsService(userDetailService)
+        auth.inMemoryAuthentication()
+                .withUser("Neoa")
+                .password("123456789")
+                .authorities("read")
+                .and()
                 .passwordEncoder(NoOpPasswordEncoder.getInstance());
-
     }
 }
