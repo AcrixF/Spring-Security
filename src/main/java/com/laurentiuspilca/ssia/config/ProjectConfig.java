@@ -1,32 +1,27 @@
 package com.laurentiuspilca.ssia.config;
 
+import com.laurentiuspilca.ssia.model.User;
+import com.laurentiuspilca.ssia.services.InMemoryUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import java.util.List;
 
 @Configuration
-public class UserManagementConfig {
-
+public class ProjectConfig {
     @Bean
     public UserDetailsService userDetailsService() {
-        var userDetailService = new InMemoryUserDetailsManager();
-
-        var user = User.withUsername("Neoa")
-                .password("12345")
-                .authorities("read")
-                .build();
-
-        userDetailService.createUser(user);
-        return userDetailService;
+        UserDetails u = new User("Neoa", "12345", "read");
+        List<UserDetails> users = List.of(u);
+        return new InMemoryUserDetailsService(users);
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
-
 }
