@@ -13,6 +13,7 @@ import java.util.List;
 
 @Configuration
 public class ProjectConfig {
+
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails u = new User("Neoa", "12345", "read");
