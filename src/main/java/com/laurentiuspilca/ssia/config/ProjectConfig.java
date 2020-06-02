@@ -1,7 +1,10 @@
 package com.laurentiuspilca.ssia.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -13,22 +16,22 @@ import javax.sql.DataSource;
 @Configuration
 public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private AuthenticationProvider authenticationProvider;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider);
+    }
+
+
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {
-
-        String usersByUsernameQuery = "select username, password, enabled  from users where username = ?";
-        String authsByUserQuery = "select username, authority from spring.authorities where username = ?";
-
-        var userDetailsManager = new JdbcUserDetailsManager(dataSource);
-        userDetailsManager.setUsersByUsernameQuery(usersByUsernameQuery);
-        userDetailsManager.setAuthoritiesByUsernameQuery(authsByUserQuery);
-        userDetailsManager.deleteUser("john");
-        return userDetailsManager;
+        return new JdbcUserDetailsManager(dataSource);
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
-
 }
