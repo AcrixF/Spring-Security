@@ -51,7 +51,7 @@ public class HelloController {
         try {
             Callable<String> contextTask = new DelegatingSecurityContextCallable<>(task);
 
-            return "Ciao " + executor.submit(contextTask).get() + "!";
+            return "Ciao, " + executor.submit(contextTask).get() + "!";
         } finally {
             executor.shutdown();;
         }
@@ -70,7 +70,7 @@ public class HelloController {
         service = new DelegatingSecurityContextExecutorService(service);
 
         try {
-            return "Hola " + service.submit(task).get() + "!";
+            return "Hola, " + service.submit(task).get() + "!";
         } finally {
             service.shutdown();
         }
