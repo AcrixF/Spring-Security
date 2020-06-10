@@ -1,5 +1,7 @@
 package com.laurentiuspilca.ssia.config;
 
+import com.laurentiuspilca.ssia.handlers.CustomAuthenticationFailureHandler;
+import com.laurentiuspilca.ssia.handlers.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,14 +22,26 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationProvider authenticationProvider;
 
+    @Autowired
+    private CustomAuthenticationSuccessHandler authenticationSuccessProvider;
+
+    @Autowired
+    private CustomAuthenticationFailureHandler authenticationFailureHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // Customizer
-        http.httpBasic(customizer -> {
-            customizer.realmName("Spring Customizer");
-            customizer.authenticationEntryPoint(new CustomEntryPoint());
-        });
+        // Login Authentication
+
+        /*
+        http.formLogin()
+                .defaultSuccessUrl("/home", true);
+         */
+
+        http.formLogin()
+                    .successHandler(authenticationSuccessProvider)
+                    .failureHandler(authenticationFailureHandler)
+                .and()
+                    .httpBasic();
 
         http.authorizeRequests()
                 .anyRequest()
