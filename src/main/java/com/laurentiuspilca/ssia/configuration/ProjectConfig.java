@@ -17,11 +17,14 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        String expression = "hasAuthority('READ') and !hasAuthority('DELETE')";
+
         http.httpBasic();
 
         http.authorizeRequests()
                 .anyRequest()
-                .hasAnyAuthority("READ","WRITE");
+                .access(expression);
     }
 
     @Bean
@@ -36,7 +39,7 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
         UserDetails user_2 = User.withUsername("AcrixF")
                 .password("12345")
-                .authorities("WRITE")
+                .authorities("READ","WRITE", "DELETE")
                 .build();
 
         userDetailsManager.createUser(user_1);
