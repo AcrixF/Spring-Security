@@ -1,4 +1,4 @@
-package com.laurentiuspilca.ssia.configuration;
+package com.laurentiuspilca.ssia.configuration.filters;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
