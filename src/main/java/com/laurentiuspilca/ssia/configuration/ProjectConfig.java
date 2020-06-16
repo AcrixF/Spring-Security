@@ -22,12 +22,10 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic();
 
         http.authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/a")
+                .mvcMatchers("/a/b/**")
                     .authenticated()
-                .mvcMatchers(HttpMethod.POST, "/a")
-                    .permitAll()
                 .anyRequest()
-                    .denyAll();
+                    .permitAll();
 
         http.csrf().disable();
 
