@@ -21,8 +21,11 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic();
 
         http.authorizeRequests()
-                .anyRequest()
-                .hasRole("ADMIN");
+                .mvcMatchers("/hello").hasRole("ADMIN")
+                .mvcMatchers("/ciao").hasRole("MANAGER")
+                .anyRequest().authenticated();
+                //.anyRequest().permitAll();
+
     }
 
     @Bean
