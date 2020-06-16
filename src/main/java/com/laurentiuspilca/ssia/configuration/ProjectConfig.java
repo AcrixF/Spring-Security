@@ -21,8 +21,9 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic();
 
         http.authorizeRequests()
-                .antMatchers("/hello")
-                    .authenticated();
+                .regexMatchers(".*/[us|uk|ca]+/[en|fr].*")
+                    .authenticated()
+                .anyRequest().hasAuthority("premium");
 
         http.csrf().disable();
 
@@ -35,12 +36,12 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
         UserDetails user_1 = User.withUsername("Neoa")
                 .password("12345")
-                .roles("ADMIN")
+                .authorities("read")
                 .build();
 
         UserDetails user_2 = User.withUsername("AcrixF")
                 .password("12345")
-                .roles("MANAGER")
+                .authorities("read", "premium")
                 .build();
 
         userDetailsManager.createUser(user_1);
